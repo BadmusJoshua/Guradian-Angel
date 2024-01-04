@@ -1,23 +1,59 @@
 <?php
 include 'inc/config/database.php';
+$userExist = $passwordErr = $name = $email = $phone = $address = '';
 
 if (isset($_POST['submit'])) {
+  echo "submitted";
   if (!empty($_POST['name'])) {
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    echo $name;
   }
   if (!empty($_POST['email'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
   }
   if (!empty($_POST['phone'])) {
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    echo $phone;
   }
-  if (!empty($_POST['addresS'])) {
+  if (!empty($_POST['address'])) {
     $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   }
   if (!empty($_POST['password'])) {
-    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $password = $_POST['password']; // No filtering of password
+    if (strlen($password) >= 8) {
+      $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+      // Check if email exists
+      $sqli = "SELECT * FROM clients WHERE email = ?";
+      $stmt = $pdo->prepare($sqli);
+      $stmt->execute([$email]);
+      $userCount = $stmt->rowCount();
+
+      if ($userCount > 0) {
+        $userExist = 1;
+      } else {
+        $sql = "INSERT INTO clients (name, email, phone, address, password) VALUES (?,?,?,?,?) ";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$name, $email, $phone, $address, $hashed_password]);
+
+        // Fetch user ID
+        $id_fetch = "SELECT id FROM clients WHERE email = ?";
+        $stmt = $pdo->prepare($id_fetch);
+        $stmt->execute([$email]);
+        $detail = $stmt->fetch(PDO::FETCH_ASSOC);
+        $userId = $detail['id'];
+
+        session_start();
+        $_SESSION['id'] = $userId;
+        header("Location: complaint.php");
+        exit(); // Terminate script execution after redirect
+      }
+    } else {
+      $passwordErr = 1;
+    }
   }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,18 +101,18 @@ if (isset($_POST['submit'])) {
 
 
           <div class="site-logo">
-            <a href="index.html" class="text-white">Guardian Angel</a>
+            <a href="index.php" class="text-white">Guardian Angel</a>
           </div>
 
 
           <nav class="site-navigation text-left ml-auto " role="navigation">
             <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
-              <li><a href="index.html" class="nav-link">Home</a></li>
-              <li><a href="about.html" class="nav-link">About Us</a></li>
-              <li><a href="causes.html" class="nav-link">Our Causes</a></li>
-              <li><a href="login.html" class="nav-link">Login</a></li>
-              <li class="active"><a href="signup.html" class="nav-link">SignUp</a></li>
-              <li><a href="contact.html" class="nav-link">Contact</a></li>
+              <li><a href="index.php" class="nav-link">Home</a></li>
+              <li><a href="about.php" class="nav-link">About Us</a></li>
+              <li><a href="causes.php" class="nav-link">Our Causes</a></li>
+              <li><a href="login.php" class="nav-link">Login</a></li>
+              <li class="active"><a href="signup.php" class="nav-link">SignUp</a></li>
+              <li><a href="contact.php" class="nav-link">Contact</a></li>
             </ul>
           </nav>
           <div class="ml-auto toggle-button d-inline-block d-lg-none"><a href="#" class="site-menu-toggle py-5 js-menu-toggle text-white"><span class="icon-menu h3 text-white"></span></a></div>
@@ -119,27 +155,42 @@ if (isset($_POST['submit'])) {
                 <p class="text-center">Reporting abuse isn't just an option; it's a responsibility.</p>
               </span>
               <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+                <?php
+
+                if ($userExist) {
+                  echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                          Account already exists!
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                }
+                if ($passwordErr) {
+                  echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                          Password must have at least 8!
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                }
+                ?>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Name" required>
+                  <input type="text" class="form-control" placeholder="Name" name="name" value="<?= $name ?>" required>
                 </div>
 
                 <div class="form-group">
-                  <input type="email" class="form-control" placeholder="Email" required>
+                  <input type="email" class="form-control" placeholder="Email" name="email" value="<?= $email ?>" required>
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="Address" required>
+                  <input type="text" class="form-control" placeholder="Address" name="address" value="<?= $address ?>" required>
                 </div>
                 <div class="form-group">
-                  <input type="tel" class="form-control" placeholder="Phone Number" required>
+                  <input type="tel" class="form-control" placeholder="Phone Number" name="phone" value="<?= $phone ?>" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control" placeholder="Password" required>
+                  <input type="password" class="form-control" placeholder="Password" name="password" required>
                 </div>
 
                 <div class="form-group d-flex flex-column justify-content-center">
                   <button class="btn btn-primary" type="submit" name="submit">Submit</button>
                   <p class="text-center">
-                    <a href="login.html">Have an account already? Login</a>
+                    <a href="login.php">Have an account already? Login</a>
                   </p>
                 </div>
               </form>

@@ -59,7 +59,7 @@ if (isset($_POST['subscribe'])) {
 
 
           <div class="site-logo">
-            <a href="index.html" class="text-white">Guardian Angel</a>
+            <a href="index.php" class="text-white">Guardian Angel</a>
           </div>
 
 

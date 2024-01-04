@@ -13,7 +13,7 @@
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
- * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @license   http://www.gnu.org/copyleft/lesser.php GNU Lesser General Public License
  * @note      This program is distributed in the hope that it will be useful - WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
@@ -153,7 +153,7 @@ class SMTP
      * Whether to use VERP.
      *
      * @see http://en.wikipedia.org/wiki/Variable_envelope_return_path
-     * @see http://www.postfix.org/VERP_README.html Info on VERP
+     * @see http://www.postfix.org/VERP_README.php Info on VERP
      *
      * @var bool
      */
@@ -297,7 +297,7 @@ class SMTP
                 $str = preg_replace('/\r\n|\r/m', "\n", $str);
                 echo gmdate('Y-m-d H:i:s'),
                 "\t",
-                    //Trim trailing space
+                //Trim trailing space
                 trim(
                     //Indent for readability, except for trailing break
                     str_replace(
@@ -337,7 +337,7 @@ class SMTP
         //Connect to the SMTP server
         $this->edebug(
             "Connection: opening to $host:$port, timeout=$timeout, options=" .
-            (count($options) > 0 ? var_export($options, true) : 'array()'),
+                (count($options) > 0 ? var_export($options, true) : 'array()'),
             self::DEBUG_CONNECTION
         );
 
@@ -428,7 +428,7 @@ class SMTP
             );
             $this->edebug(
                 'SMTP ERROR: ' . $this->error['error']
-                . ": $errstr ($errno)",
+                    . ": $errstr ($errno)",
                 self::DEBUG_CLIENT
             );
 
@@ -1016,7 +1016,7 @@ class SMTP
             //Cut off error code from each response line
             $detail = preg_replace(
                 "/{$code}[ -]" .
-                ($code_ex ? str_replace('.', '\\.', $code_ex) . ' ' : '') . '/m',
+                    ($code_ex ? str_replace('.', '\\.', $code_ex) . ' ' : '') . '/m',
                 '',
                 $this->last_reply
             );
@@ -1291,7 +1291,7 @@ class SMTP
             if ($endtime && time() > $endtime) {
                 $this->edebug(
                     'SMTP -> get_lines(): timelimit reached (' .
-                    $this->Timelimit . ' sec)',
+                        $this->Timelimit . ' sec)',
                     self::DEBUG_LOWLEVEL
                 );
                 break;
