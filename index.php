@@ -1,9 +1,11 @@
 <?php
 include 'inc/config/database.php';
-$noEmail = 0;
+//checks if subscribe button is hit
 if (isset($_POST['subscribe'])) {
+  //checks if email field is filled
   if (!empty($_POST['email'])) {
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    //adds email to newsletter table
     $sql = "INSERT into newsletter (email) value (?)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$email]);
@@ -63,12 +65,12 @@ if (isset($_POST['subscribe'])) {
 
           <nav class="site-navigation text-left ml-auto " role="navigation">
             <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
-              <li class="active"><a href="index.html" class="nav-link">Home</a></li>
-              <li><a href="about.html" class="nav-link">About Us</a></li>
-              <li><a href="causes.html" class="nav-link">Our Causes</a></li>
-              <li><a href="login.html" class="nav-link">Login</a></li>
-              <li><a href="signup.html" class="nav-link">SignUp</a></li>
-              <li><a href="contact.html" class="nav-link">Contact</a></li>
+              <li class="active"><a href="index.php" class="nav-link">Home</a></li>
+              <li><a href="about.php" class="nav-link">About Us</a></li>
+              <li><a href="causes.php" class="nav-link">Our Causes</a></li>
+              <li><a href="login.php" class="nav-link">Login</a></li>
+              <li><a href="signup.php" class="nav-link">SignUp</a></li>
+              <li><a href="contact.php" class="nav-link">Contact</a></li>
             </ul>
           </nav>
 
@@ -390,7 +392,7 @@ if (isset($_POST['subscribe'])) {
 
           <div class="mb-5">
             <h2 class="footer-heading mb-4">Subscribe to Newsletter</h2>
-            <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method=" post" class="footer-subscribe-form">
+            <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="footer-subscribe-form">
 
 
               <div class="col-12">

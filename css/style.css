@@ -1829,6 +1829,13 @@ h1, h2, h3, h4, h5,
   line-height: 1.5; }
   .event-29191 h3 a {
     color: #000; }
+                @media screen and (max-width:765px) {
+        
+                  .box-92819>h1 {
+                    font-size: 50px;
+                    font-weight: 100;
+                  }
+                }
     @media screen and (max-width:365px){
    
 .box-92819 > h1{
