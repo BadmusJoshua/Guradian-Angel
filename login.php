@@ -1,40 +1,3 @@
-<?php
-$passwordErr = $userNotFound = '';
-if (isset($_POST['login'])) {
-  if (!empty($_POST['email'])) {
-    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-  }
-  if (!empty($_POST['password'])) {
-    $password = $_post['password'];
-  }
-  //checking email
-  $sql = "SELECT * FROM clients WHERE email = ?";
-  $stmt = $pdo->prepare($sql);
-  $stmt->execute([$email]);
-  $userCount = $stmt->rowCount();
-  if ($userCount > 0) {
-    // Fetch user password
-    $id_fetch = "SELECT * FROM clients WHERE email = ?";
-    $stmt = $pdo->prepare($id_fetch);
-    $stmt->execute([$email]);
-    $detail = $stmt->fetch(PDO::FETCH_ASSOC);
-    $hashedPassword = $detail['password'];
-    $Id = $detail['id'];
-    // Verify if the input password matches the hashed password
-    if (password_verify($password, $hashedPassword)) {
-      // Passwords match, perform the desired action (e.g., grant access)
-      session_start();
-      $_SESSION['id'] = $Id;
-      Header("Location:complaint.php");
-    } else {
-      // Passwords do not match
-      $passwordErr = 1;
-    }
-  } else {
-    $userNotFound = 1;
-  }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -123,23 +86,16 @@ if (isset($_POST['login'])) {
             Enter your login details to report incidence
           </p>
         </span>
-        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
-          <?php
-          if ($passwordErr) {
-            echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
-                          Incorrect Password! 
-                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>';
-          }
-          ?>
+        <form action="#">
           <div class="form-group">
-            <input type="email" class="form-control" placeholder="Email" name="email" />
+            <input type="email" class="form-control" placeholder="Email" />
           </div>
           <div class="form-group">
-            <input type="password" class="form-control" placeholder="Enter your password" name="password" />
+            <input type="password" class="form-control" placeholder="Enter your password" />
           </div>
-          <div class="form-group d-flex flex-column justify-content-center">
-            <button class="btn btn-primary" type="submit" name="login">Login</button>
+          <div class="form-group d-flex flex-column justify-conter">
+            <input type="submit" value="Login" class="btn btn-primary" />
+
             <p class="text-center">
               <a href="signup.php">Don't have an account yet? SignUp</a>
             </p>
