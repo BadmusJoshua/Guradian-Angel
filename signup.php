@@ -18,39 +18,6 @@ if (isset($_POST['submit'])) {
   if (!empty($_POST['address'])) {
     $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   }
-  // if (!empty($_POST['password'])) {
-  //   $password = $_POST['password']; // No filtering of password
-  //   if (strlen($password) >= 8) {
-  //     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-  //     // Check if email exists
-  //     $sqli = "SELECT * FROM clients WHERE email = ?";
-  //     $stmt = $pdo->prepare($sqli);
-  //     $stmt->execute([$email]);
-  //     $userCount = $stmt->rowCount();
-
-  //     if ($userCount > 0) {
-  //       $userExist = 1;
-  //     } else {
-  //       $sql = "INSERT INTO clients (name, email, phone, address, password) VALUES (?,?,?,?,?) ";
-  //       $stmt = $pdo->prepare($sql);
-  //       $stmt->execute([$name, $email, $phone, $address, $hashed_password]);
-
-  //       // Fetch user ID
-  //       $id_fetch = "SELECT id FROM clients WHERE email = ?";
-  //       $stmt = $pdo->prepare($id_fetch);
-  //       $stmt->execute([$email]);
-  //       $detail = $stmt->fetch(PDO::FETCH_ASSOC);
-  //       $userId = $detail['id'];
-
-  //       session_start();
-  //       $_SESSION['id'] = $userId;
-  //       header("Location: complaint.php");
-  //       exit(); // Terminate script execution after redirect
-  //     }
-  //   } else {
-  //     $passwordErr = 1;
-  //   }
   if (!empty($_POST['password'])) {
     $password = $_POST['password'];
 

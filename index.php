@@ -83,24 +83,16 @@ if (isset($_POST['subscribe'])) {
       </div>
 
     </header>
-
-
-
-
     <div class="owl-carousel-wrapper ">
-
-
-
       <div class="box-92819 d-flex flex-column justify-content-center align-items-center">
-        <h1 class="text-white mb-3 text-center">Report. Protect. Empower. Every child deserves safety.</h1>
-        <p><a href="login.php" class="btn btn-primary py-3 px-4 rounded-0 mx-auto">Report Now</a></p>
+        <h1 class="text-black mb-3 text-center">Report. Protect. Empower. Every child deserves safety.</h1>
+        <p><a href="login.php" class="btn btn-primary py-3 px-4 rounded-0 mx-auto">Report Now oo</a></p>
       </div>
 
       <div class="owl-carousel owl-1 ">
         <div class="ftco-cover-1 overlay" style="background-image: url('images/hero_1.jpg');"></div>
         <div class="ftco-cover-1 overlay" style="background-image: url('images/hero_2.jpg');"></div>
         <div class="ftco-cover-1 overlay" style="background-image: url('images/hero_3.jpg');"></div>
-
       </div>
     </div>
 
