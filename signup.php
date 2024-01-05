@@ -19,15 +19,10 @@ if (isset($_POST['submit'])) {
     $address = filter_input(INPUT_POST, 'address', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   }
   if (!empty($_POST['password'])) {
-    $password = $_POST['password'];
-
-    // Password pattern for validation
-    $pattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/';
-
-    if (preg_match($pattern, $password)) {
-      // Password meets the criteria
-
+    $password = $_POST['password']; // No filtering of password
+    if (strlen($password) >= 8) {
       $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
       // Check if email exists
       $sqli = "SELECT * FROM clients WHERE email = ?";
       $stmt = $pdo->prepare($sqli);
@@ -54,12 +49,10 @@ if (isset($_POST['submit'])) {
         exit(); // Terminate script execution after redirect
       }
     } else {
-      // Password doesn't meet the criteria
       $passwordErr = 1;
     }
   }
 }
-
 
 ?>
 <!DOCTYPE html>
