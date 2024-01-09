@@ -1,3 +1,37 @@
+<?php
+include 'inc/config/database.php';
+$notFound = $passwordErr = '';
+if (isset($_POST['login'])) {
+  if (!empty($_POST['email'])) {
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $sql = "SELECT * FROM clients WHERE email = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$email]);
+    $userCount = $stmt->rowCount();
+    if ($userCount > 0) {
+      if (!empty($_POST['password'])) {
+        $password = ($_POST['password']);
+        $sql = "SELECT * FROM clients WHERE email = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$email]);
+        $detail = $stmt->fetch(PDO::FETCH_ASSOC);
+        $userId = $detail['id'];
+        $hashedPassword = $detail['password'];
+
+        if (password_verify($password, $hashedPassword)) {
+          session_start();
+          $_SESSION['id'] = $userId;
+          Header("Location:complaint.php");
+        } else {
+          $passwordErr = 1;
+        }
+      }
+    } else {
+      $notFound = 1;
+    }
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,21 +117,36 @@
         <h3 class="mb-4 text-cursive text-center">Guardian Angel</h3>
         <span>
           <p class="text-center">
-            Enter your login details to report incidence
+            Enter your login details to proceed
           </p>
         </span>
-        <form action="#">
-          <div class="form-group">
-            <input type="email" class="form-control" placeholder="Email" />
-          </div>
-          <div class="form-group">
-            <input type="password" class="form-control" placeholder="Enter your password" />
-          </div>
-          <div class="form-group d-flex flex-column justify-conter">
-            <input type="submit" value="Login" class="btn btn-primary" />
+        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
+          <?php
 
-            <p class="text-center">
-              <a href="signup.php">Don't have an account yet? SignUp</a>
+          if ($notFound) {
+            echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                          Account not found!
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+          }
+          if ($passwordErr) {
+            echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                          Incorrect Password!
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+          }
+          ?>
+          <div class="form-group">
+            <input type="email" class="form-control" placeholder="Email" name="email" required />
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" placeholder="Enter your password" name="password" required />
+          </div>
+          <div class="form-group d-flex flex-column justify-content-center">
+            <input type="submit" value="Login" class="btn btn-success" name="login" />
+
+            <p class="text-center ">
+              <a href="signup.php" class="text-success">Don't have an account yet? SignUp</a>
             </p>
           </div>
         </form>
