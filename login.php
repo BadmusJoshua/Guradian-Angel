@@ -93,21 +93,21 @@ if (isset($_POST['login'])) {
       </div>
     </header>
 
-    <div class="row justify-content-center align-items-md-center mx-auto mt-4 mb-4" style="width: 70%; height: 90vh; overflow: hidden">
-      <div class="col-md-6 col-sm-12 d-block" style="height: 100%">
-        <div class="wrapper" style="height: 100%">
-          <div class="owl-carousel owl-1" style="height: 100%">
-            <div class="ftco-cover-1" style="
+    <div class="row d-md-flex flex-row justify-content-evenly align-items-md-center mx-auto mt-4 mb-4 ">
+      <div class="col-md-6 col-sm-12 d-md-block d-none">
+        <div class="wrapper">
+          <div class="owl-carousel owl-1">
+            <div class="ftco-cover-1 " style="
                   background-image: url('images/jakayla-toney-Zjx73GhhCaw-unsplash.jpg');
-                  height: 100%;
+                  height:20%;
                 "></div>
-            <div class="ftco-cover-1" style="
+            <div class="ftco-cover-1 " style="
                   background-image: url('images/kiana-bosman-0pB01U2NDCQ-unsplash.jpg');
-                  height: 100%;
+                  height:20%;
                 "></div>
-            <div class="ftco-cover-1" style="
+            <div class="ftco-cover-1 " style="
                   background-image: url('images/girl-sitting-stack-books.jpg');
-                  height: 100%;
+                  height:20%;
                 "></div>
           </div>
         </div>
@@ -146,7 +146,8 @@ if (isset($_POST['login'])) {
             <input type="submit" value="Login" class="btn btn-success" name="login" />
 
             <p class="text-center ">
-              <a href="signup.php" class="text-success">Don't have an account yet? SignUp</a>
+              <a href="signup.php" class="text-success">Don't have an account yet?&nbsp;SignUp</a>
+              <a href="forgot-password.php" class="text-success">Forgot&nbsp;Password?</a>
             </p>
           </div>
         </form>

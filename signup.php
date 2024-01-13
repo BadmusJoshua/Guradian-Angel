@@ -149,7 +149,7 @@ if (isset($_POST['submit'])) {
       <div class="container">
         <div class="row align-items-stretch d-flex">
           <div class="col-md-6 col-sm-12 m-auto">
-            <div class="bg-white h-100 p-4 shadow">
+            <div class="bg-white h-100 p-4 shadow login-pad">
               <h3 class="mb-4 text-cursive text-center">Signup Now</h3>
               <span>
                 <p class="text-center">Reporting abuse isn't just an option; it's a responsibility.</p>
@@ -188,8 +188,8 @@ if (isset($_POST['submit'])) {
                 </div>
 
                 <div class="form-group d-flex flex-column justify-content-center">
-                  <button class="btn btn-primary" type="submit" name="submit">Submit</button>
-                  <p class="text-center">
+                  <button class="btn btn-success" type="submit" name="submit">Submit</button>
+                  <p class="text-center text-green">
                     <a href="login.php">Have an account already? Login</a>
                   </p>
                 </div>

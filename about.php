@@ -66,8 +66,8 @@
 
     <div class="owl-carousel-wrapper">
       <div class="box-92819">
-        <h1 class="text-white mb-3">About Us</h1>
-        <p class="lead text-white">
+        <h1 class="text-white mb-3 text-center">About Us</h1>
+        <p class="lead text-white text-justify">
           At Guardian Angel, our dedication is to ensure every child lives in
           safety, free from abuse and neglect. Established with a profound
           commitment to protecting the most vulnerable members of our
