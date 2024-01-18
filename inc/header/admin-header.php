@@ -47,7 +47,7 @@ if (isset($_SESSION['id'])) {
                             <span class="hide-menu">Home</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="./index.php" aria-expanded="false">
+                            <a class="sidebar-link" href="admin-index.php" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-layout-dashboard"></i>
                                 </span>
@@ -82,6 +82,14 @@ if (isset($_SESSION['id'])) {
                             </li>
                         <?php }
                         ?>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="admin-clients.php" aria-expanded="false">
+                                <span>
+                                    <i class="ti ti-user-plus"></i>
+                                </span>
+                                <span class="hide-menu">Clients</span>
+                            </a>
+                        </li>
 
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
