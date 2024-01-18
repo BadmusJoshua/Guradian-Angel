@@ -1,6 +1,7 @@
 <?php
 require 'inc/header/admin-header.php';
 $user = $usernameErr = $passwordErr = $email = $updated = '';
+//registering new admin
 if (isset($_POST['Register'])) {
   if (!empty($_POST['username'])) {
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -35,7 +36,6 @@ if (isset($_POST['Register'])) {
           $sql = "INSERT INTO admins (username,email,password) VALUES (?,?,?)";
           $stmt = $pdo->prepare($sql);
           $stmt->execute([$username, $email, $hashed_password]);
-          $detail = $stmt->fetch(PDO::FETCH_ASSOC);
         }
       }
     } else {

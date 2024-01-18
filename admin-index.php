@@ -162,11 +162,6 @@ require_once 'inc/header/admin-header.php' ?>
                   </div>';
                         }
                         ?>
-
-
-
-
-
                       </tbody>
                     </table>
                   </div>
