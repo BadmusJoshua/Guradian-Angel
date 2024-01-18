@@ -46,16 +46,7 @@ if (isset($_POST['signUp'])) {
 }
 
 ?>
-<!doctype html>
-<html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Guardian Angel</title>
-  <link rel="shortcut icon" type="image/png" href="../assets/images/adminos/favicon.png" />
-  <link rel="stylesheet" href="../assets/css/styles.min.css" />
-</head>
 
 <body>
   <!--  Body Wrapper -->
@@ -90,54 +81,58 @@ if (isset($_POST['signUp'])) {
                             <h6 class="fw-semibold mb-0">Created at</h6>
                           </th>
                           <th class="border-bottom-0">
+                            <h6 class="fw-semibold mb-0">Updated at</h6>
+                          </th>
+                          <th class="border-bottom-0">
                             <h6 class="fw-semibold mb-0">Actions</h6>
                           </th>
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $sql = 'SELECT * FROM admins WHERE 1';
+                        //sql query to fetch all rows in the admin table
+                        $sql = "SELECT * FROM admins";
                         $stmt = $pdo->prepare($sql);
-                        // $stmt->execute([$userId]);
-                        $admins = $stmt->fetchAll();
-                        // $n = 0;
+                        $stmt->execute();
+                        $admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
                         if ($admins) {
                           foreach ($admins as $details) :
                         ?>
                             <tr>
                               <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0"><?= $details->id ?></h6>
+                                <h6 class="fw-semibold mb-0"><?= $details['id'] ?></h6>
                               </td>
                               <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-1"><?= $details->username ?></h6>
+                                <h6 class="fw-semibold mb-1"><?= $details['username'] ?></h6>
                               </td>
                               <td class="border-bottom-0">
-                                <p class="mb-0 fw-normal"><?php if ($details->superadmin === 0) {
+                                <p class="mb-0 fw-normal"><?php if ($details['superadmin'] === 0) {
                                                             echo "Admin";
                                                           } else {
                                                             echo "Super-Admin";
                                                           } ?></p>
                               </td>
                               <td class="border-bottom-0">
-                                <p class="mb-0 fw-normal"><?php if ($details->disabled === 0) {
+                                <p class="mb-0 fw-normal"><?php if ($details['disabled'] === 0) {
                                                             echo "Active";
                                                           } else {
                                                             echo "Disabled";
                                                           } ?></p>
                               </td>
                               <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0 fs-4"> <?= $details->created ?></h6>
+                                <h6 class="fw-normal mb-0 text-wrap font-size-10"> <?= $details['created'] ?></h6>
                               </td>
                               <td class="border-bottom-0">
-                                <h6 class="fw-semibold mb-0 fs-4"> <?= $details->updated ?></h6>
+                                <h6 class="fw-normal mb-0  text-wrap font-size-10"> <?= $details['updated'] ?></h6>
                               </td>
                               <td class="border-bottom-0">
-                                <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
-                                  <input type="hidden" name="id" value="<?= $details->id ?>">
-                                  <button class="btn btn-sm btn-success">Make SA</button>
-                                  <button class="btn btn-sm btn-danger">Disabled</button>
+                                <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="text-wrap">
+                                  <input type="hidden" name="id" value="<?= $details['id'] ?>">
+                                  <button class="btn btn-sm btn-success">SA</button>
+                                  <button class="btn btn-sm btn-danger">Disable</button>
                                   <button class="btn btn-sm btn-primary">Edit</button>
-                                  <button class="btn btn-sm btn-secondary">Enabled</button>
+                                  <button class="btn btn-sm btn-secondary">Enable</button>
                                 </form>
                               </td>
                             </tr>
@@ -149,12 +144,9 @@ if (isset($_POST['signUp'])) {
                         }
                         ?>
 
-
-
-
-
                       </tbody>
                     </table>
+
                   </div>
                 </div>
               </div>
