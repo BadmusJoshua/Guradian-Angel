@@ -1,4 +1,18 @@
 <?php include 'inc/header/admin-header.php';
+//disable client
+if (isset($_POST['disable'])) {
+    $id = $_POST['id'];
+    $sql = "UPDATE clients SET status = '0' WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+}
+//enable client
+if (isset($_POST['enable'])) {
+    $id = $_POST['id'];
+    $sql = "UPDATE clients SET status = '1' WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id]);
+}
 ?>
 
 <body>
@@ -77,15 +91,15 @@
                                                             <td class="border-bottom-0">
                                                                 <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
                                                                     <input type="hidden" name="id" value="<?= $details['id'] ?>">
-                                                                    <button class="btn btn-sm btn-danger">Disable</button>
-                                                                    <button class="btn btn-sm btn-primary">Enable</button>
+                                                                    <button class="btn btn-sm btn-danger" name="disable">Disable</button>
+                                                                    <button class="btn btn-sm btn-primary" name="enable">Enable</button>
                                                                 </form>
                                                             </td>
                                                         </tr>
                                                 <?php endforeach;
                                                 } else {
                                                     echo '<div class="alert alert-danger text-center" role="alert">
-                    Oops! No clients yet, maybe you need to sign up first.
+                    Oops! No clients yet!s
                   </div>';
                                                 }
                                                 ?>

@@ -1,7 +1,7 @@
 <?php
 require 'inc/header/admin-header.php';
-$user = $username = $passwordErr = $email = '';
-if (isset($_POST['signUp'])) {
+$user = $usernameErr = $passwordErr = $email = $updated = '';
+if (isset($_POST['Register'])) {
   if (!empty($_POST['username'])) {
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
   }
@@ -28,7 +28,7 @@ if (isset($_POST['signUp'])) {
         $usernameCount = $stmt->rowCount();
         // if username has been used 
         if ($usernameCount === 1) {
-          $username = 1;
+          $usernameErr = 1;
           // if username and email are available
         } else {
           // save details into admin table
@@ -36,7 +36,6 @@ if (isset($_POST['signUp'])) {
           $stmt = $pdo->prepare($sql);
           $stmt->execute([$username, $email, $hashed_password]);
           $detail = $stmt->fetch(PDO::FETCH_ASSOC);
-          $adminId = $detail['id'];
         }
       }
     } else {
@@ -45,6 +44,76 @@ if (isset($_POST['signUp'])) {
   }
 }
 
+if (isset($_POST['super-admin'])) {
+  $id = $_POST['id'];
+  $sql = "UPDATE admins SET super-admin = '1' WHERE id = ?";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([$id]);
+}
+if (isset($_POST['enable'])) {
+  $id = $_POST['id'];
+  $sql = "UPDATE admins SET disabled = '0' WHERE id = ?";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([$id]);
+}
+if (isset($_POST['disable'])) {
+  $id = $_POST['id'];
+  $sql = "UPDATE admins SET disable = '1' WHERE id = ?";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([$id]);
+}
+if (isset($_POST['edit'])) {
+  $id = $_POST['id'];
+  $sql = "SELECT * FROM admins WHERE id = ?";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([$id]);
+  $adminDetails = $stmt->fetchALL(PDO::FETCH_ASSOC);
+  $username = $adminDetails[0]['username'];
+  $email = $adminDetails[0]['email'];
+}
+//updating admin details
+if (isset($_POST['Update'])) {
+  if (!empty($_POST['username'])) {
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+  }
+  if (!empty($_POST['email'])) {
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+  }
+  if (!empty($_POST['password'])) {
+    $password = ($_POST['password']);
+    if (strlen($password) >= 8) {
+      $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+      //checking if email is available
+      $sql = "SELECT * FROM admins WHERE email = ?";
+      $stmt = $pdo->prepare($sql);
+      $stmt->execute([$email]);
+      $userCount = $stmt->rowCount();
+      //if email has been used
+      if ($userCount > 1) {
+        $user = 1;
+        //check if username is available
+      } else {
+        $sql = "SELECT * FROM admins WHERE username = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$username]);
+        $usernameCount = $stmt->rowCount();
+        // if username has been used 
+        if ($usernameCount > 1) {
+          $usernameErr = 1;
+          // if username and email are available
+        } else {
+          // save details into admin table
+          $sql = "UPDATE admins SET username = ?, email = ?, password = ? WHERE id = ?";
+          $stmt = $pdo->prepare($sql);
+          $stmt->execute([$username, $email, $hashed_password, $id]);
+          $updated = 1;
+        }
+      }
+    } else {
+      $passwordErr = 1;
+    }
+  }
+}
 ?>
 
 
@@ -129,10 +198,10 @@ if (isset($_POST['signUp'])) {
                               <td class="border-bottom-0">
                                 <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" class="text-wrap">
                                   <input type="hidden" name="id" value="<?= $details['id'] ?>">
-                                  <button class="btn btn-sm btn-success">SA</button>
-                                  <button class="btn btn-sm btn-danger">Disable</button>
-                                  <button class="btn btn-sm btn-primary">Edit</button>
-                                  <button class="btn btn-sm btn-secondary">Enable</button>
+                                  <button class="btn btn-sm btn-success" name="super-admin">SA</button>
+                                  <button class="btn btn-sm btn-danger" name="disable">Disable</button>
+                                  <button class="btn btn-sm btn-primary" name="edit">Edit</button>
+                                  <button class="btn btn-sm btn-secondary" name="enable">Enable</button>
                                 </form>
                               </td>
                             </tr>
@@ -160,7 +229,11 @@ if (isset($_POST['signUp'])) {
                   <div class="card mb-0">
                     <div class="card-body">
 
-                      <p class="card-title fw-semibold text-center">Add new admin</p>
+                      <p class="card-title fw-semibold text-center"><?php if (isset($_POST['edit'])) {
+                                                                      echo 'Update admin details';
+                                                                    } else {
+                                                                      echo 'Add new admin';
+                                                                    }  ?></p>
                       <form method="post" action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>">
                         <?php
                         if ($user) {
@@ -169,7 +242,7 @@ if (isset($_POST['signUp'])) {
                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>';
                         }
-                        if ($username) {
+                        if ($usernameErr) {
                           echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
                           Sorry, this username is unavailable!
                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -181,10 +254,16 @@ if (isset($_POST['signUp'])) {
                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>';
                         }
+                        if ($updated) {
+                          echo '<div class="alert alert-success text-center alert-dismissible fade show" role="alert">
+                          Update Successful!
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                        }
                         ?>
                         <div class="mb-3">
                           <label for="exampleInputtext1" class="form-label">Username</label>
-                          <input type="text" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" name="username" value="<?= $username ?>">
+                          <input type="text" class="form-control" id="exampleInputtext1" aria-describedby="textHelp" name="username" value="<?= $username ?>" required>
                         </div>
                         <div class="mb-3">
                           <label for="exampleInputEmail1" class="form-label">Email Address</label>
@@ -194,7 +273,15 @@ if (isset($_POST['signUp'])) {
                           <label for="exampleInputPassword1" class="form-label">Password</label>
                           <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
                         </div>
-                        <button class="btn btn-success w-100 py-8 fs-4 mb-4 rounded-2" name="signUp">Register</button>
+                        <button class="btn btn-success w-100 py-8 fs-4 mb-4 rounded-2" <?php if (isset($_POST['edit'])) {
+                                                                                          echo 'name="Update"';
+                                                                                        } else {
+                                                                                          echo 'name = "Register"';
+                                                                                        } ?>> <?php if (isset($_POST['edit'])) {
+                                                                                                echo 'Update';
+                                                                                              } else {
+                                                                                                echo 'Register';
+                                                                                              } ?></button>
                       </form>
                     </div>
                   </div>
