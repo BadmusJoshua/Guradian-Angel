@@ -85,7 +85,7 @@ if (isset($_POST['signIn'])) {
                         Remember this Device
                       </label>
                     </div>
-                    <a class="text-success fw-bold" href="./index.html">Forgot Password ?</a>
+                    <a class="text-success fw-bold" href="./index.php">Forgot Password ?</a>
 
                   </div>
                   <button class="btn btn-success w-100 py-8 fs-4 mb-4 rounded-2" name="signIn">Sign In</button>
