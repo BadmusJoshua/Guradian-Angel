@@ -73,6 +73,7 @@ if (isset($_POST['subscribe'])) {
               <li><a href="login.php" class="nav-link">Login</a></li>
               <li><a href="signup.php" class="nav-link">SignUp</a></li>
               <li><a href="contact.php" class="nav-link">Contact</a></li>
+              <li><a href="admin-login.php" class="nav-link">Admin</a></li>
             </ul>
           </nav>
 
