@@ -17,7 +17,7 @@ if (isset($_POST['subscribe'])) {
 <html lang="en">
 
 <head>
-  <title>Guardian &mdash; Angel</title>
+  <title>Guardian Angel</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
