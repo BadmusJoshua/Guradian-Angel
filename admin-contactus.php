@@ -17,62 +17,73 @@ if (isset($_POST['seen'])) {
                 <div class="card-body p-4">
                     <h5 class="card-title fw-semibold mb-4">Guest's Messages</h5>
                     <div class="table-responsive">
-                        <table class="table text-nowrap mb-0 align-middle " style="max-width:100%;">
-                            <thead class="text-dark fs-4 ">
-                                <tr>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">S/N</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Name</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Email</h6>
-                                    </th>
-                                    <th class="border-bottom-0 ">
-                                        <h6 class="fw-semibold mb-0">Message</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Date</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Actions</h6>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php
-                                $sql = 'SELECT * FROM contactus WHERE isRead = ? ORDER BY created DESC ';
-                                $stmt = $pdo->prepare($sql);
-                                $stmt->execute(['0']);
-                                $logs = $stmt->fetchAll();
-                                $n = 0;
-                                if ($logs) {
-                                    foreach ($logs as $details) :
-                                ?>
+                        <table class="table text-wrap mb-0 align-middle " style="max-width:100%;">
+
+                            <?php
+                            $sql = 'SELECT * FROM contactus WHERE isRead = ? ORDER BY created DESC ';
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute(['0']);
+                            $logs = $stmt->fetchAll();
+                            $n = 1;
+                            if ($logs) { ?>
+                                <thead class="text-dark fs-4 ">
+                                    <tr>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">S/N</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Name</h6>
+                                        </th>
+                                        <!-- <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Email</h6>
+                                        </th> -->
+                                        <th class="border-bottom-0 ">
+                                            <h6 class="fw-semibold mb-0">Message</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Date</h6>
+                                        </th>
+                                        <th class="border-bottom-0">
+                                            <h6 class="fw-semibold mb-0">Actions</h6>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($logs as $details) :
+                                    ?>
                                         <tr>
                                             <td class="border-bottom-0">
                                                 <h6 class="fw-semibold mb-0"><?= $n++ ?></h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-1"><?= $details->fullname ?></h6>
+                                                <h6 class="fw-semibold mb-1 text-center"><?= $details->fullname ?></h6>
+                                                <span class="fs-2 text-center"><?= $details->email ?></span>
                                             </td>
-                                            <td class="border-bottom-0">
-                                                <h6 class="fw-normal mb-0"><?= $details->email ?></h6>
-                                            </td>
+                                            <!-- <td class="border-bottom-0">
+                                                <h6 class="fw-normal mb-0"></h6>
+                                            </td> -->
                                             <td class="border-bottom-0">
                                                 <p class="mb-0 fw-normal text-justify text-wrap"><?= $details->message ?></p>
                                             </td>
 
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0 fs-4"> <?= $details->created ?></h6>
+                                                <h6 class="fw-normal mb-0 fs-2"> <?php
+                                                                                    $date = DateTime::createFromFormat('Y-m-d H:i:s', $details->created);
+                                                                                    echo $date->format('D d M, Y H:i:s');
+                                                                                    ?>
+
+                                                </h6>
                                             </td>
                                             <td class="border-bottom-0">
 
                                                 <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
-                                                    <input type="hidden" name="id" value="<?= $details->id ?>">
-                                                    <button class="btn btn-sm btn-primary" name="seen">seen</button>
-                                                    <button class="btn btn-sm btn-secondary">reply</button>
+                                                    <?php if ($details->replied == '0') { ?>
+                                                        <a href="admin-view-messages.php?id=<?= $details->id ?>" class="btn btn-sm btn-secondary">Reply</a>
+                                                    <?  } else { ?>
+                                                        <button class="btn btn-dark-light disabled">Replied</button>
+                                                    <?php  }
+                                                    ?>
+
                                                 </form>
 
                                             </td>
@@ -89,10 +100,11 @@ if (isset($_POST['seen'])) {
 
 
 
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

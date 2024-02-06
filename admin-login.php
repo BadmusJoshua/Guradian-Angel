@@ -16,10 +16,10 @@ if (isset($_COOKIE['remember_token'])) {
   if ($user === 1) {
     //fetching the user id
     $user_details = $stmt->fetch();
-    $adminId = $user_details['user_id'];
+    $adminId = $user_details->user_id;
 
     // Calculate the expiration timestamp by adding 30 days to the token creation time
-    $expirationTimestamp = strtotime($user_details['created_at']) + (30 * 24 * 60 * 60);
+    $expirationTimestamp = strtotime($user_details->created_at) + (30 * 24 * 60 * 60);
 
     // Check if the current time is less than the expiration timestamp
     $tokenIsValid = time() < $expirationTimestamp;
@@ -107,8 +107,8 @@ if (isset($_POST['signIn'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Guardian Angel</title>
-  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="../assets/css/styles.min.css" />
+  <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
+  <link rel="stylesheet" href="assets/css/styles.min.css" />
 </head>
 
 <body>
@@ -177,8 +177,8 @@ if (isset($_POST['signIn'])) {
       </div>
     </div>
   </div>
-  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+  <script src="assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -29,7 +29,7 @@ if (isset($_POST['enable'])) {
                                 <div class="d-sm-flex d-block align-items-center justify-content-between mb-9 w-100">
                                     <div class="table-responsive w-100">
                                         <h5 class="card-title fw-semibold text-center">List of Users</h5>
-                                        <table class="table text-nowrap mb-0 align-middle w-100">
+                                        <table class="table text-wrap mb-0 align-middle w-100">
                                             <thead class="text-dark fs-4">
                                                 <tr>
                                                     <th class="border-bottom-0">
@@ -117,8 +117,8 @@ if (isset($_POST['enable'])) {
 
             </div>
         </div>
-        <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-        <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/jquery/dist/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

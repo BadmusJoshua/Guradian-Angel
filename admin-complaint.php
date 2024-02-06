@@ -13,33 +13,33 @@ include 'inc/header/admin-header.php';
                             <thead class="text-dark fs-4">
                                 <tr>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Id</h6>
+                                        <h6 class="fw-semibold mb-0 text-center">S/N</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Name</h6>
+                                        <h6 class="fw-semibold mb-0 text-center">Reporter's Name</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Category</h6>
+                                        <h6 class="fw-semibold mb-0 text-center">Category</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Message</h6>
+                                        <h6 class="fw-semibold mb-0 text-center">Report</h6>
                                     </th>
 
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Date</h6>
+                                        <h6 class="fw-semibold mb-0 text-center">Date</h6>
                                     </th>
                                     <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Actions</h6>
+                                        <h6 class="fw-semibold mb-0 text-center">Actions</h6>
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                $sql = 'SELECT * FROM complaints WHERE attended = 0';
+                                $sql = "SELECT * FROM complaints";
                                 $stmt = $pdo->prepare($sql);
-                                // $stmt->execute([$userId]);
+                                $stmt->execute([]);
                                 $logs = $stmt->fetchAll();
-                                $n = 0;
+                                $n = 1;
                                 if ($logs) {
                                     foreach ($logs as $details) :
                                 ?>
@@ -48,23 +48,31 @@ include 'inc/header/admin-header.php';
                                                 <h6 class="fw-semibold mb-0"><?= $n++ ?></h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-1"><?= $details->complainerName ?></h6>
-                                                <span class="fw-normal"><?= $details->complainerOccupation ?></span>
+                                                <h6 class="fw-semibold mb-1"><?php
+                                                                                $sqli = "SELECT * FROM clients WHERE id = ?";
+                                                                                $stmti = $pdo->prepare($sqli);
+                                                                                $stmti->execute([$details->complainerId]);
+                                                                                $complainerDetails = $stmti->fetch();
+                                                                                echo $complainerDetails->name;
+                                                                                ?>
+                                                </h6>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <p class="mb-0 fw-normal"><?= $details->category ?></p>
+                                                <h6 class="mb-1 fw-semibold"><?= $details->category ?></>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <div class="d-flex align-items-center gap-2">
-                                                    <?= $details->valid ?>
-                                                    <span class="badge bg-primary rounded-3 fw-semibold">Low</span>
+                                                <div class="d-flex align-items-center text-justify text-wrap">
+                                                    <?= $details->report ?>
                                                 </div>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0 fs-4"> <?= $details->dateTime ?></h6>
+                                                <small class="fw-normal mb-0 fs-2"> <?php $details->created_at;
+                                                                                    $date = DateTime::createFromFormat('Y-m-d H:i:s', $details->created_at);
+                                                                                    echo $date->format('d M, Y H:i:s');
+                                                                                    ?></small>
                                             </td>
                                             <td class="border-bottom-0">
-                                                <h6 class="fw-semibold mb-0 fs-4"> <button class="btn btn-sm btn-primary">Valid</button><button class="btn btn-sm btn-secondary">Respond</button><button class="btn btn-sm btn-secondary">View</button></h6>
+                                                <a href="view-complaint.php?id=<?= $details->id; ?>" class="btn btn-sm btn-primary">View</a>
                                             </td>
                                         </tr>
                                 <?php endforeach;
@@ -87,7 +95,7 @@ include 'inc/header/admin-header.php';
         </div>
     </div>
 </div>
-</div>
+
 <?php
 include 'inc/footer/admin-footer.php';
 ?>
