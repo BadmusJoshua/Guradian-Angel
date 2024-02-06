@@ -34,9 +34,7 @@ if (isset($_POST['seen'])) {
                                         <th class="border-bottom-0">
                                             <h6 class="fw-semibold mb-0">Name</h6>
                                         </th>
-                                        <!-- <th class="border-bottom-0">
-                                            <h6 class="fw-semibold mb-0">Email</h6>
-                                        </th> -->
+
                                         <th class="border-bottom-0 ">
                                             <h6 class="fw-semibold mb-0">Message</h6>
                                         </th>
@@ -77,11 +75,11 @@ if (isset($_POST['seen'])) {
                                             <td class="border-bottom-0">
 
                                                 <form action="<?php htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post">
-                                                    <?php if ($details->replied == '0') { ?>
-                                                        <a href="admin-view-messages.php?id=<?= $details->id ?>" class="btn btn-sm btn-secondary">Reply</a>
-                                                    <?  } else { ?>
-                                                        <button class="btn btn-dark-light disabled">Replied</button>
-                                                    <?php  }
+                                                    <?php if ($details->replied == '0') {
+                                                        echo "<a href='admin-view-messages.php?id=$details->id' class='btn btn-sm btn-secondary'>Reply</a>";
+                                                    } else {
+                                                        echo '<button class="btn btn-dark-light disabled">Replied!</button>';
+                                                    }
                                                     ?>
 
                                                 </form>

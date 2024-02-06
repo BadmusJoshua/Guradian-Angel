@@ -23,7 +23,7 @@ if (isset($_POST['valid'])) {
     $stmt->execute(['1', '1', $adminId, $complaintId]);
 }
 if (isset($_POST['report'])) {
-    $sql = "UPDATE complaints SET reported = ?, attended = ? , attendedBy = ? WHERE id = ?";
+    $sql = "UPDATE complaints SET forward = ?, attended = ? , attendedBy = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['1', '1', $adminId, $complaintId]);
 }
@@ -101,25 +101,21 @@ if (isset($_POST['report'])) {
                 <div class="col-12 border-2">
 
                     <div class="d-flex flex-row justify-content-center">
-                        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF'])  ?>" method="post">
-                            <button class="btn btn-secondary" name="report">Report </button>
+                        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF'])  ?>" method="post" class="justify-content-between">
+
                             <?php
-                            if ($complaintDetails->isValid == "1") : ?>
+                            if ($complaintDetails->forward == "0") {
+                                if ($complaintDetails->isValid == "1") {
+                                    echo '<button class="btn btn-warning" name="invalid">Not Valid</button>';
+                                } else {
+                                    echo "<button class='btn btn-success' name='valid'>Valid</button>";
+                                }
+                                echo "<button class='btn btn-primary' name='report'>Report</button>";
+                            } else {
+                                echo "<button class='btn btn-secondary disabled' name='report'>Reported!</button>";
+                            };
+                            ?>
 
-                                <button class="btn btn-warning" name="invalid">Not Valid</button>
-                            <? else : {
-                                    echo "<button class='btn btn-success' name = 'valid'>Valid</button>";
-                                };
-
-                            endif ?>
-                            <?php
-                            if ($complaintDetails->reported == "0") : ?>
-
-                                <button class="btn btn-secondary" name="report">Report</button>
-                            <? else : {
-                                    echo "<button class='btn btn-success disabled' name = 'valid'>Reported</button>";
-                                };
-                            endif ?>
                         </form>
                     </div>
                 </div>
