@@ -1,5 +1,12 @@
 <?php
-require_once 'inc/header/admin-header.php' ?>
+require_once 'inc/header/admin-header.php';
+
+$sql = "SELECT * FROM complaints";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([]);
+$complaints = $stmt->rowCount();
+
+?>
 
 <body>
 
@@ -72,7 +79,7 @@ require_once 'inc/header/admin-header.php' ?>
                 <div class="row alig n-items-start">
                   <div class="col-8">
                     <h5 class="card-title mb-9 fw-semibold"> Monthly Reports </h5>
-                    <h4 class="fw-semibold mb-3">6,820</h4>
+                    <h4 class="fw-semibold mb-3"><?= $complaints ?></h4>
                     <div class="d-flex align-items-center pb-1">
                       <span class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
                         <i class="ti ti-arrow-down-right text-danger"></i>
@@ -102,10 +109,18 @@ require_once 'inc/header/admin-header.php' ?>
             <h5 class="card-title fw-semibold mb-4">Recent Complaints</h5>
 
             <?php
+            //fetching unattended reports
             $sql = "SELECT * FROM complaints WHERE attended = ? ORDER BY created_at DESC ";
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['0']);
             $logs = $stmt->fetchAll();
+
+            //fetching attended reports
+            $sql = "SELECT * FROM complaints WHERE attended = ? ORDER BY created_at DESC ";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute(['1']);
+            $atlogs = $stmt->fetchAll();
+
             $n = 0;
             if ($logs) {  ?>
               <div class="table-responsive">
@@ -163,21 +178,95 @@ require_once 'inc/header/admin-header.php' ?>
                                                                                         ?></h6>
                         </td>
                       </tr>
-                  <?php endforeach;
-                  } else {
-                    echo '<div class="alert alert-danger text-center" role="alert">
+                    <?php endforeach;
+                  } elseif ($atlogs) { ?>
+                    <div class="table-responsive">
+                      <table class="table text-nowrap mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                          <tr>
+                            <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">S/N</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Name</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Category</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Valid</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Status</h6>
+                            </th>
+                            <th class="border-bottom-0">
+                              <h6 class="fw-semibold mb-0">Date</h6>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php foreach ($atlogs as $complaint) :
+                          ?>
+                            <tr>
+                              <td class="border-bottom-0">
+                                <h6 class="fw-semibold mb-0"><?= $n++ ?></h6>
+                              </td>
+                              <td class="border-bottom-0">
+
+                                <h6 class="fw-semibold mb-1"><?php
+                                                              $sqli = "SELECT * FROM clients WHERE id = ?";
+                                                              $stmti = $pdo->prepare($sqli);
+                                                              $stmti->execute([$complaint->complainerId]);
+                                                              $complainerDetails = $stmti->fetch();
+                                                              echo $complainerDetails->name;
+                                                              ?></h6>
+                                <!-- <span class="fw-normal"><?= $complaint->complainerOccupation ?></span> -->
+                              </td>
+                              <td class="border-bottom-0">
+                                <p class="mb-0 fw-normal"><?= $complaint->category ?></p>
+                              </td>
+                              <td class="border-bottom-0">
+                                <div class="d-flex align-items-center gap-2">
+                                  <?php
+                                  if ($complaint->isValid == '1') { ?>
+                                    <span class="badge bg-success rounded-3 fw-semibold">Valid</span>
+                                  <?php } else { ?>
+                                    <span class="badge bg-warning rounded-3 fw-semibold">Invalid</span>
+                                  <?php } ?>
+                                </div>
+                              </td>
+                              <td class="border-bottom-0">
+                                <div class="d-flex align-items-center gap-2">
+                                  <?php
+                                  if ($complaint->attended == '1') { ?>
+                                    <span class="badge bg-primary rounded-3 fw-semibold">Attended</span>
+                                  <?php } else { ?>
+                                    <span class="badge bg-secondary rounded-3 fw-semibold">Unattended</span>
+                                  <?php } ?>
+                                </div>
+                              </td>
+                              <td class="border-bottom-0">
+                                <h6 class="fw-normal mb-0 w-50 text-wrap text-center gap-1"> <?php $complaint->created_at;
+                                                                                              $date = DateTime::createFromFormat('Y-m-d H:i:s', $complaint->created_at);
+                                                                                              echo $date->format('d M, Y H:i:s');
+                                                                                              ?></h6>
+                              </td>
+                            </tr>
+                        <?php endforeach;
+                        } else {
+                          echo '<div class="alert alert-danger text-center" role="alert">
                             Opps! No new complaints now, check later.
                           </div>';
-                  }
-                  ?>
-                  </tbody>
-                </table>
+                        }
+                        ?>
+                        </tbody>
+                      </table>
+                    </div>
               </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
 </body>
 

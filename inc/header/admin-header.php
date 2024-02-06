@@ -9,8 +9,7 @@ if (isset($_SESSION['id'])) {
     $detail = $stmt->fetch();
     $super_admin = $detail->superadmin;
 } else {
-    // header("Location:admin-login.php");
-    echo "session not started from login";
+    header("Location:admin-login.php");
 }
 
 ?>
@@ -23,6 +22,7 @@ if (isset($_SESSION['id'])) {
     <title>Guardian Angel</title>
     <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="assets/css/styles.min.css" />
+    <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>

@@ -2,14 +2,6 @@
 include 'inc/config/database.php';
 $not_found = $mail_unsent = $mail_sent = $email = $phoneNumber = "";
 
-//Import PHPMailer classes into the global namespace
-use PHPMailer\PHPMailer\PHPMailer;
-
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-
-
 if (isset($_POST['reset'])) {
     //sanitizing input
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
@@ -26,8 +18,7 @@ if (isset($_POST['reset'])) {
         $user = $stmt->fetch();
         // $userEmail = $user->email;
         $userCount = $stmt->rowCount();
-        echo $email . '' . $phoneNumber . '' . $userCount . '' . $token . '' . $expires_at;
-        if ($userCount == 1) {
+        if ($userCount == '1') {
 
             //Update the password_reset_token column in the database
             $stmt = $pdo->prepare("UPDATE clients SET password_reset_token = ?, password_reset_expires_at = ? WHERE email = ? AND phone = ?");
@@ -40,43 +31,18 @@ if (isset($_POST['reset'])) {
             $subject = 'Testing Password Reset';
             $message = '<div style="width:80%;border:1px solid black; margin:auto;padding:10px;">Click on the following link to reset your password<br> <b> <a href="http://localhost/guardian-angel/guardian-angel/new_password.php?token=' . $token . '">Password Reset<a></b><br>This token expires at ' . $expires_at . '</div>';
 
+            require 'inc/config/mailer-config.php';
 
 
-            //Create an instance; passing `true` enables exceptions
-            $mail = new PHPMailer(true);
-
-            try {
-                mail($receiver, $subject, $message);
-
-                //     $mail->isSMTP(); //Send using SMTP
-                //     $mail->Host = 'sandbox.smtp.mailtrap.io';
-                //     $mail->SMTPAuth = true;
-                //     $mail->Port = 2525;
-                //     $mail->Username = '17a1d32f239ef6';
-                //     $mail->Password = '4bad338b4ab5c1';
-
-                //     //Recipients
-                //     $mail->setFrom('handyman@info.com', 'HandyMan');
-                //     $mail->addAddress($email, $username); //Add a recipient
-                //     $mail->addReplyTo('no-reply@info.com', 'handyman no-reply');
-
-
-                //     //Attachments
-                //     // $mail->addAttachment('/var/tmp/file.tar.gz'); //Add attachments
-                //     // $mail->addAttachment('/tmp/image.jpg', 'new.jpg'); //Optional name
-
-                //     //Content
-                //     $mail->isHTML(true); //Set email format to HTML
-                //     $mail->Subject = 'Testing Password Reset';
-                //     $mail->Body = '<div style="width:80%;border:1px solid black; margin:auto;padding:10px;">Click on the following link to reset your password<br> <b> <a href="http://localhost/guardian-angel/guardian-angel/new_password.php?token=' . $token . '">Password Reset<a></b><br>This token expires at ' . $expires_at . '</div>';
-                //     // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-                $mail->send();
-                $mail_sent = 1;
-            } catch (Exception $e) {
-                $mail_unsent = 1;
+            sendMail($email, $subject, $response);
+            if (!$mail->send()) {
+                $unsent = 1;
+            } else {
+                $sql = "UPDATE contactus SET response = ? , replied = ?,attendedBy = ? WHERE id = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$response, '1', $adminId, $messageId]);
+                $sent = 1;
             }
-            $mail->smtpClose();
         }
     }
 }

@@ -1,45 +1,7 @@
 <?php
 require 'inc/header/admin-header.php';
+$sent = $unsent = '';
 
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-
-require 'PHPMailer/src/Exception.php';
-require 'PHPMailer/src/PHPMailer.php';
-require 'PHPMailer/src/SMTP.php';
-
-require 'inc/config/mailer-config.php';
-
-function sendMail($email, $subject, $message)
-{
-    //creating a new phpmailer object
-    $mail = new PHPMailer(true);
-
-    //smtp protocol to send mail
-    $mail->isSMTP();
-
-    $mail->SMTPAuth = true;
-
-    $mail->Host = MAILHOST;
-    $mail->Username = USERNAME;
-    $mail->Password = PASSWORD;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
-    $mail->setFrom(SEND_FROM, SEND_FROM_NAME);
-    $mail->addAddress($email);
-    $mail->addReplyTo(REPLY_TO, REPLY_TO_NAME);
-    $mail->isHTML(true);
-    $mail->Subject = $subject;
-    $mail->Body = $message;
-    $mail->AltBody = $message;
-
-    if (!$mail->send()) {
-        return "Email not sent";
-    } else {
-        return "success";
-    }
-}
 
 if (isset($_GET['id'])) {
     $messageId = $_GET['id'];
@@ -54,15 +16,36 @@ $complaintDetails = $stmt->fetch();
 $receiverEmail = $complaintDetails->email;
 
 
+if ($complaintDetails->replied == '1') {
+    $admin = $complaintDetails->attendedBy;
+    $admin_sql = "SELECT * FROM admins WHERE id = ?";
+    $admin_stmt = $pdo->prepare($admin_sql);
+    $admin_stmt->execute([$admin]);
+    $admin_details = $admin_stmt->fetch();
+    $admin_name = $admin_details->username;
+}
+
+
 if (isset($_POST['reply'])) {
     $subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $response = filter_input(INPUT_POST, 'response', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $sql = "UPDATE contactus SET response = ? , replied = ?,attendedBy = ? WHERE id = ?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$response, '1', $adminId, $messageId]);
 
-    $reply = sendMail($receiverEmail, $subject, $response);
+
+    require 'inc/config/mailer-config.php';
+
+
+    sendMail($receiverEmail, $subject, $response);
+    if (!$mail->send()) {
+        $unsent = 1;
+    } else {
+        $sql = "UPDATE contactus SET response = ? , replied = ?,attendedBy = ? WHERE id = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$response, '1', $adminId, $messageId]);
+        $sent = 1;
+    }
 }
+
+
 ?>
 <div class="container-fluid">
     <div class="row">
@@ -90,51 +73,62 @@ if (isset($_POST['reply'])) {
                         </span>
                     </div>
                 </div>
-                <div class="col">
-                    <h5><?= $complaintDetails->message ?></h5>
+                <div class="col  mb-2">
+                    <h5 class='text-justify rounded text-dark fw-semibold p-4' style="background-color: cyan ; width:fit-content;"><?= $complaintDetails->message ?></h5>
                 </div>
 
-
-
                 <div class="d-flex flex-row justify-content-center">
-                    <form action="<?php htmlspecialchars($_SERVER['PHP_SELF'])  ?>" method="post" class="col-lg-8 col-sm-12 border border-2 rounded-2 p-4 border-cyan">
-                        <?php
-                        if (@$reply == "response") { ?>
-                            <div class="alert alert-success text-center alert-dismissible fade show" role="alert">
-                                Message Sent Successfully!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        <?php } else { ?>
-                            <div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
-                                Sending Failed!
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                        <?php }
-                        ?>
-                        <h5 class="fw-semibold text-center">Respond to this message </h5>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="validationCustom03" class="form-label">Subject: </label>
-                                <div class="form-group mb-0">
-                                    <textarea class="message-control form-control user-text-editor" name="subject" id="emailsubject" cols="30" rows="3" placeholder="Enter email subject"></textarea>
-                                </div>
-                            </div>
-                        </div><!-- end col-lg-12 -->
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="validationCustom03" class="form-label">Response: </label>
-                                <div class="form-group mb-0">
-                                    <textarea class="message-control form-control user-text-editor" name="response" id="jobDescription" cols="30" rows="1" placeholder="Enter response"></textarea>
-                                </div>
-                            </div>
-                        </div><!-- end col-lg-12 -->
-                        <div class="col-12 justify-content-center align-items-center d-flex">
-                            <div class="btn-box mt-4">
-                                <button class=" btn btn-primary border-0 align-self-center" type="submit" name="reply">Reply</button>
-                            </div><!-- end btn-box -->
-                        </div>
+                    <?php
+                    if ($complaintDetails->replied == '1') { ?>
+                        <div class="col mb-2 ">
+                            <h5 class='text-center text-light bg-primary rounded p-4 d-flex flex-column ' style=" width:fit-content;float:right;"><?= $complaintDetails->response ?>
+                                <em class=" "><span class="fw-normal fs-3"> - <?= $admin_name; ?></span></em>
+                            </h5>
 
-                    </form>
+                        </div>
+                    <?php } else { ?>
+                        <form action="<?php htmlspecialchars($_SERVER['PHP_SELF'])  ?>" method="post" class="col-lg-8 col-sm-12 border border-2 rounded-2 p-4 border-cyan">
+                            <?php
+                            if ($sent) { ?>
+                                <div class="alert alert-success text-center alert-dismissible fade show" role="alert">
+                                    Message Sent Successfully!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php } ?>
+                            <?php if ($unsent) { ?>
+                                <div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                                    Sending Failed!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            <?php }
+                            ?>
+                            <h5 class="fw-semibold text-center">Respond to this message </h5>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="validationCustom03" class="form-label">Subject: </label>
+                                    <div class="form-group mb-0">
+                                        <textarea class="message-control form-control user-text-editor" name="subject" id="emailsubject" cols="30" rows="1" placeholder="Enter email subject"></textarea>
+                                    </div>
+                                </div>
+                            </div><!-- end col-lg-12 -->
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="validationCustom03" class="form-label">Response: </label>
+                                    <div class="form-group mb-0">
+                                        <textarea class="message-control form-control user-text-editor" name="response" id="emailresponse" cols="30" rows="5" placeholder="Enter response"></textarea>
+                                    </div>
+                                </div>
+                            </div><!-- end col-lg-12 -->
+                            <div class="col-12 justify-content-center align-items-center d-flex">
+                                <div class="btn-box mt-4">
+                                    <button class=" btn btn-primary border-0 align-self-center" type="submit" name="reply">Reply</button>
+                                </div><!-- end btn-box -->
+                            </div>
+
+                        </form>
+                    <?php  }
+                    ?>
+
                 </div>
             </div>
         </div>
