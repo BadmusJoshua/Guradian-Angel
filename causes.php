@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="css/aos.css">
 
   <!-- MAIN CSS -->
-  <link rel="stylesheet" href="css/style.css">
+  <!-- <link rel="stylesheet" href="css/style.css"> -->
 
 </head>
 

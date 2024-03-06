@@ -22,8 +22,11 @@ if (isset($_SESSION['id'])) {
     <title>Guardian Angel</title>
     <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="assets/css/styles.min.css" />
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="assets\css\styles.css" />
+    <link rel="stylesheet" href="assets\scss\styles.scss" />
+    <link rel="stylesheet" href="assets\css\icons\tabler-icons\tabler-icons.css" />
+
+
 </head>
 
 <body>
@@ -35,42 +38,45 @@ if (isset($_SESSION['id'])) {
             <!-- Sidebar scroll-->
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between">
-                    <p class="card-title fw-semibold">Guardian Angel</p>
+                    <a href="complaint.php" class="text-nowrap logo-img text-dark-emphasis fw-bolder fs-14">
+                        <img src="assets\images\logos\favicon.png" width="" alt="" /> Guardian Angel
+                    </a>
                     <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                         <i class="ti ti-x fs-8"></i>
                     </div>
                 </div>
                 <!-- Sidebar navigation-->
-                <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-                    <ul id="sidebarnav">
+                <nav class="sidebar-nav scroll-sidebar" data-simplebar="" style="overflow:hidden;">
+                    <ul id="sidebarnav" style="overflow:hidden;">
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Home</span>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="admin-index.php" aria-expanded="false">
+                            <a class="sidebar-link" href="./index.html" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-layout-dashboard"></i>
                                 </span>
                                 <span class="hide-menu">Dashboard</span>
                             </a>
-                        </li>
+
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="complaint.php" aria-expanded="false">
                                 <span>
                                     <i class="ti ti-file-description"></i>
                                 </span>
-                                <span class="hide-menu">Complain</span>
+                                <span class="hide-menu">Make Complain</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="admin-contactus.php" aria-expanded="false">
+                            <a class="sidebar-link" href="client-complaint.php" aria-expanded="false">
                                 <span>
-                                    <i class="ti ti-cards"></i>
+                                    <i class="ti ti-file-description"></i>
                                 </span>
-                                <span class="hide-menu">Messages</span>
+                                <span class="hide-menu">View Complaints</span>
                             </a>
                         </li>
+
                         <li class="sidebar-item">
                             <a class="sidebar-link" href="admin-contactus.php" aria-expanded="false">
                                 <span>

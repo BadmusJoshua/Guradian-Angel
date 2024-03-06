@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="assets/css/styles.min.css" />
+  <!-- <link rel="stylesheet" href="assets/css/styles.min.css" /> -->
 
   <link href="https://fonts.googleapis.com/css?family=Mansalva|Roboto&display=swap" rel="stylesheet" />
 
@@ -48,7 +48,6 @@
               <li class="active">
                 <a href="about.php" class="nav-link">About Us</a>
               </li>
-              <li><a href="causes.php" class="nav-link">Our Causes</a></li>
               <li><a href="login.php" class="nav-link">Login</a></li>
               <li>
                 <a href="signup.php" class="nav-link">SignUp</a>
@@ -56,6 +55,8 @@
               <li>
                 <a href="contact.php" class="nav-link">Contact</a>
               </li>
+              <li><a href="admin-login.php" class="nav-link">Admin</a></li>
+
             </ul>
           </nav>
 

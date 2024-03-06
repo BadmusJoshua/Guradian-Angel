@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="assets/css/styles.min.css" />
+  <!-- <link rel="stylesheet" href="assets/css/styles.min.css" /> -->
 
   <link href="https://fonts.googleapis.com/css?family=Mansalva|Roboto&display=swap" rel="stylesheet" />
 
@@ -70,7 +70,6 @@ if (isset($_POST['submit'])) {
             <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php" class="nav-link">About Us</a></li>
-              <li><a href="causes.php" class="nav-link">Our Causes</a></li>
               <li><a href="login.php" class="nav-link">Login</a></li>
               <li>
                 <a href="signup.php" class="nav-link">SignUp</a>
@@ -78,6 +77,8 @@ if (isset($_POST['submit'])) {
               <li class="active">
                 <a href="contact.php" class="nav-link">Contact</a>
               </li>
+              <li><a href="admin-login.php" class="nav-link">Admin</a></li>
+
             </ul>
           </nav>
           <div class="ml-auto toggle-button d-inline-block d-lg-none">
@@ -147,10 +148,10 @@ if (isset($_POST['submit'])) {
               <ul class="list-unstyled footer-link">
                 <li class="d-block mb-3">
                   <span class="d-block text-muted small text-uppercase font-weight-bold">Address:</span>
-                  <span>34 Freeman, Lagos, Nigeria</span>
+                  <span>34 Freeman, FUTA NorthGate, Akure, Nigeria</span>
                 </li>
                 <li class="d-block mb-3">
-                  <span class="d-block text-muted small text-uppercase font-weight-bold">Phone:</span><span>+234 913 5864 525</span>
+                  <span class="d-block text-muted small text-uppercase font-weight-bold">Phone:</span><span>+234 916-877-4488</span>
                 </li>
                 <li class="d-block mb-3">
                   <span class="d-block text-muted small text-uppercase font-weight-bold">Email:</span><span>info@guardianangel.com</span>

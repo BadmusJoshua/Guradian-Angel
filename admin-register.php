@@ -292,6 +292,5 @@ if (isset($_POST['Update'])) {
             </div>
             <script src="assets/libs/jquery/dist/jquery.min.js"></script>
             <script src="assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+            <?php
+            include 'inc/footer/admin-footer.php'; ?>

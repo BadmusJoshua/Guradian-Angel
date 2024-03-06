@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="assets/css/styles.min.css" />
+  <!-- <link rel="stylesheet" href="assets/css/styles.min.css" /> -->
 
 
   <link href="https://fonts.googleapis.com/css?family=Mansalva|Roboto&display=swap" rel="stylesheet">
@@ -111,10 +111,11 @@ if (isset($_POST['submit'])) {
             <ul class="site-menu main-menu js-clone-nav ml-auto d-none d-lg-block">
               <li><a href="index.php" class="nav-link">Home</a></li>
               <li><a href="about.php" class="nav-link">About Us</a></li>
-              <li><a href="causes.php" class="nav-link">Our Causes</a></li>
               <li><a href="login.php" class="nav-link">Login</a></li>
               <li class="active"><a href="signup.php" class="nav-link">SignUp</a></li>
               <li><a href="contact.php" class="nav-link">Contact</a></li>
+              <li><a href="admin-login.php" class="nav-link">Admin</a></li>
+
             </ul>
           </nav>
           <div class="ml-auto toggle-button d-inline-block d-lg-none"><a href="#" class="site-menu-toggle py-5 js-menu-toggle text-white"><span class="icon-menu h3 text-white"></span></a></div>

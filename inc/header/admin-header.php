@@ -12,6 +12,56 @@ if (isset($_SESSION['id'])) {
     header("Location:admin-login.php");
 }
 
+//getting count of each category of Report
+$sql = "SELECT * FROM complaints WHERE category = 'Physical Abuse'";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+    $stmt->execute([]);
+    $physical_abuse = $stmt->rowCount();
+} else {
+    echo "Error: Unable to process statement";
+}
+$sql = "SELECT * FROM complaints WHERE category = 'Sexual Abuse'";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+    $stmt->execute([]);
+    $sexual_abuse = $stmt->rowCount();
+} else {
+    echo "Error: Unable to process statement";
+}
+$sql = "SELECT * FROM complaints WHERE category = 'Child Labour'";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+    $stmt->execute([]);
+    $child_labour = $stmt->rowCount();
+} else {
+    echo "Error: Unable to process statement";
+}
+$sql = "SELECT * FROM complaints WHERE category = 'Medical Neglect'";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+    $stmt->execute([]);
+    $medical_neglect = $stmt->rowCount();
+} else {
+    echo "Error: Unable to process statement";
+}
+$sql = "SELECT * FROM complaints WHERE category = 'Abandonment'";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+    $stmt->execute([]);
+    $abandonment = $stmt->rowCount();
+} else {
+    echo "Error: Unable to process statement";
+}
+$sql = "SELECT * FROM complaints WHERE category = 'Trafficking and Exploitation'";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+    $stmt->execute([]);
+    $Trafficking = $stmt->rowCount();
+} else {
+    echo "Error: Unable to process statement";
+}
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -22,18 +72,31 @@ if (isset($_SESSION['id'])) {
     <title>Guardian Angel</title>
     <link rel="shortcut icon" type="image/png" href="assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="assets/css/styles.min.css" />
-    <link rel="stylesheet" href="assets/css/styles.css" />
+    <link rel="stylesheet" href="assets\css\styles.css" />
+    <link rel="stylesheet" href="assets\css\icons\tabler-icons\tabler-icons.css" />
+
+
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
+    <link rel="stylesheet" href="css/aos.css">
+
 </head>
+
 
 <body>
     <!--  Body Wrapper -->
     <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
         <!-- Sidebar Start -->
-        <aside class="left-sidebar">
+        <aside class="left-sidebar ">
             <!-- Sidebar scroll-->
             <div>
                 <div class="brand-logo d-flex align-items-center justify-content-between m-auto sidebar-item">
-                    <a href="admin-index.php" class="text-nowrap logo-img text-dark-emphasis">
+                    <a href="admin-index.php" class="text-nowrap logo-img text-dark-emphasis fw-bolder fs-14">
                         <img src="assets\images\logos\favicon.png" width="" alt="" /> Guardian Angel
                     </a>
                     <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
@@ -41,8 +104,8 @@ if (isset($_SESSION['id'])) {
                     </div>
                 </div>
                 <!-- Sidebar navigation-->
-                <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-                    <ul id="sidebarnav">
+                <nav class="sidebar-nav scroll-sidebar " style="overflow:hidden;" data-simplebar="">
+                    <ul id="sidebarnav" style="overflow:hidden;">
                         <li class="nav-small-cap">
                             <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
                             <span class="hide-menu">Home</span>
@@ -60,7 +123,7 @@ if (isset($_SESSION['id'])) {
                                 <span>
                                     <i class="ti ti-file-description"></i>
                                 </span>
-                                <span class="hide-menu">Complaints</span>
+                                <span class="hide-menu">View Complaints</span>
                             </a>
                         </li>
                         <li class="sidebar-item">
@@ -68,7 +131,7 @@ if (isset($_SESSION['id'])) {
                                 <span>
                                     <i class="ti ti-cards"></i>
                                 </span>
-                                <span class="hide-menu">Messages</span>
+                                <span class="hide-menu">View Messages</span>
                             </a>
                         </li>
                         <?php
@@ -78,7 +141,7 @@ if (isset($_SESSION['id'])) {
                                     <span>
                                         <i class="ti ti-user-plus"></i>
                                     </span>
-                                    <span class="hide-menu">Register</span>
+                                    <span class="hide-menu">Admins</span>
                                 </a>
                             </li>
                         <?php }

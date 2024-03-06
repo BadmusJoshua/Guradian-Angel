@@ -17,12 +17,12 @@ if (isset($_POST['seen'])) {
                 <div class="card-body p-4">
                     <h5 class="card-title fw-semibold mb-4">Guest's Messages</h5>
                     <div class="table-responsive">
-                        <table class="table text-wrap mb-0 align-middle " style="max-width:100%;">
+                        <table class="table text-wrap mb-0 align-middle  text-dark fs-4" style="max-width:100%;">
 
                             <?php
-                            $sql = 'SELECT * FROM contactus WHERE isRead = ? ORDER BY created DESC ';
+                            $sql = 'SELECT * FROM contactus ORDER BY created DESC , isRead ASC  ';
                             $stmt = $pdo->prepare($sql);
-                            $stmt->execute(['0']);
+                            $stmt->execute([]);
                             $logs = $stmt->fetchAll();
                             $n = 1;
                             if ($logs) { ?>
@@ -78,7 +78,8 @@ if (isset($_POST['seen'])) {
                                                     <?php if ($details->replied == '0') {
                                                         echo "<a href='admin-view-messages.php?id=$details->id' class='btn btn-sm btn-secondary'>Reply</a>";
                                                     } else {
-                                                        echo '<button class="btn btn-dark-light disabled">Replied!</button>';
+                                                        echo '<button class="btn btn-dark btn-sm disabled">Replied!</button>';
+                                                        echo "<a href='admin-view-messages.php?id=$details->id' class='btn btn-sm btn-light'>View</a>";
                                                     }
                                                     ?>
 
@@ -107,3 +108,5 @@ if (isset($_POST['seen'])) {
         </div>
     </div>
 </div>
+<?php
+include 'inc/footer/admin-footer.php'; ?>

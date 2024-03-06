@@ -5,6 +5,9 @@ $sent = $unsent = '';
 
 if (isset($_GET['id'])) {
     $messageId = $_GET['id'];
+    // $sql = "UPDATE contactus SET attended = ? WHERE id = ?";
+    // $stmt = $pdo->prepare($sql);
+    // $stmt->execute(['1', $messageId]);
 } else {
     //redirect to complaint log
     header("Location:admin-contactus.php");
@@ -74,7 +77,7 @@ if (isset($_POST['reply'])) {
                     </div>
                 </div>
                 <div class="col  mb-2">
-                    <h5 class='text-justify rounded text-dark fw-semibold p-4' style="background-color: cyan ; width:fit-content;"><?= $complaintDetails->message ?></h5>
+                    <h5 class='text-justify rounded text-dark fw-semibold p-4' style="background-color: #49BEFF ; width:fit-content;"><?= $complaintDetails->message ?></h5>
                 </div>
 
                 <div class="d-flex flex-row justify-content-center">
