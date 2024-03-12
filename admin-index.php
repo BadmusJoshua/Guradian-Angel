@@ -1,11 +1,33 @@
 <?php
 require_once 'inc/header/admin-header.php';
 
-$sql = "SELECT * FROM complaints";
+//sql to get count of complaints
+$sql = "SELECT * FROM complaints ";
+$stmt = $pdo->prepare($sql);
+if ($stmt) {
+  $stmt->execute([]);
+  $complaints = $stmt->rowCount();
+} else {
+  echo "Error: Unable to Prepare Statement";
+}
+
+//sql to get count of abuse categories by group
+$sql = "SELECT category, COUNT (id) AS TOTAL  FROM complaints GROUP BY category";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([]);
-$complaints = $stmt->rowCount();
+$data = array();
+foreach ($data as $row) {
+  $data[] = array(
+    'category' => $row["category"],
+    'total' => $row["total"],
+    'color' => '#' . rand(100000, 999999) . ' '
+  );
+}
+echo json_encode($data);
 ?>
+
+
+
 
 <div class="container-fluid">
   <!--  Row 1 -->
@@ -69,7 +91,7 @@ $complaints = $stmt->rowCount();
                 </div>
                 <div class="col-4 d-flex m-auto justify-content-center align-items-center">
                   <div class="d-flex align-self-center justify-content-center">
-                    <div id="breakup"></div>
+                    <div id="doughnut_chart"></div>
                   </div>
                 </div>
               </div>

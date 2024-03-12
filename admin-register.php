@@ -1,6 +1,7 @@
 <?php
 require 'inc/header/admin-header.php';
 $user = $usernameErr = $passwordErr = $email = $updated = '';
+
 //registering new admin
 if (isset($_POST['Register'])) {
   if (!empty($_POST['username'])) {
@@ -46,19 +47,19 @@ if (isset($_POST['Register'])) {
 
 if (isset($_POST['super-admin'])) {
   $id = $_POST['id'];
-  $sql = "UPDATE admins SET super-admin = '1' WHERE id = ?";
+  $sql = "UPDATE admins SET superadmin = 1 WHERE id = ?";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([$id]);
 }
 if (isset($_POST['enable'])) {
   $id = $_POST['id'];
-  $sql = "UPDATE admins SET disabled = '0' WHERE id = ?";
+  $sql = "UPDATE admins SET disabled = 0 WHERE id = ?";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([$id]);
 }
 if (isset($_POST['disable'])) {
   $id = $_POST['id'];
-  $sql = "UPDATE admins SET disable = '1' WHERE id = ?";
+  $sql = "UPDATE admins SET disabled = 1 WHERE id = ?";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([$id]);
 }
@@ -183,11 +184,11 @@ if (isset($_POST['Update'])) {
                                                           } ?></p>
                               </td>
                               <td class="border-bottom-0">
-                                <p class="mb-0 fw-normal"><?php if ($details['disabled'] === 0) {
-                                                            echo "Active";
-                                                          } else {
-                                                            echo "Disabled";
-                                                          } ?></p>
+                                <p class="mb-0 fw-normal"><?php if ($details['disabled'] === 0) { ?>
+                                <div class="text-success">Active</div>
+                              <?php } else { ?>
+                                <div class="text-danger">Disabled</div>
+                              <?php  } ?></p>
                               </td>
                               <td class="border-bottom-0">
                                 <h6 class="fw-normal mb-0 text-wrap font-size-10"> <?= $details['created'] ?></h6>

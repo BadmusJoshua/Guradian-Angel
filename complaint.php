@@ -28,15 +28,30 @@ if (isset($_POST['make-report'])) {
         }
 
         $uploadFile = $uploadDirectory . '/' . $fileName;
-        $acceptedExt = array('jpeg', 'jpg', 'png');
+        move_uploaded_file($_FILES['evidence']['tmp_name'], $uploadFile);
+        $evidence = $uploadFile;
+
+        // $fileExt = strtolower(pathinfo($_FILES['profileImage']['name'], PATHINFO_EXTENSION));
+        // $fileName = uniqid('employerImage') . '.' . $fileExt;
+        // $uploadDirectory = 'assets/uploads/employer-image';
+
+        // if (!file_exists($uploadDirectory)) {
+        //     mkdir($uploadDirectory, 0777, true);
+        // }
+
+        // $uploadFile = $uploadDirectory . '/' . $fileName;
 
 
-        if (in_array($fileExt, $acceptedExt)) {
-            move_uploaded_file($_FILES['evidence']['tmp_name'], $uploadFile);
-            $evidence = $uploadFile;
-        } else {
-            $fileErr = 1;
-        }
+
+        // $acceptedExt = array('jpeg', 'jpg', 'png');
+
+
+        // if (in_array($fileExt, $acceptedExt)) {
+        //     move_uploaded_file($_FILES['evidence']['tmp_name'], $uploadFile);
+        //     $evidence = $uploadFile;
+        // } else {
+        //     $fileErr = 1;
+        // }
     } else {
         $evidence = '';
     }

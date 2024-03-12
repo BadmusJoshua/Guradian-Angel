@@ -1,6 +1,6 @@
 <?php
 require 'inc/config/database.php';
-$notFound = $passwordErr = $Expired_token = $token_lost = '';
+$notFound = $passwordErr = $Expired_token = $token_lost = $disabled = '';
 
 // Check if the user has a valid remember token
 if (isset($_COOKIE['remember_token'])) {
@@ -73,6 +73,7 @@ if (isset($_POST['signIn'])) {
     $detail = $stmt->fetch(PDO::FETCH_ASSOC);
     $adminId = $detail['id'];
     $hashedPassword = $detail['password'];
+    $adminStatus = $detail['disabled'];
     $verify = password_verify($password, $hashedPassword);
     if ($verify) {
       // Check if the "Remember Me" checkbox is checked
@@ -88,10 +89,14 @@ if (isset($_POST['signIn'])) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$token, $adminId]);
       }
-      // Redirect the user to the dashboard
-      session_start();
-      $_SESSION['id'] = $adminId;
-      Header("Location:admin-index.php");
+      if ($adminStatus == 1) {
+        $disabled = 1;
+      } else {
+        // Redirect the user to the dashboard
+        session_start();
+        $_SESSION['id'] = $adminId;
+        Header("Location:admin-index.php");
+      }
     } else {
       $passwordErr = 1;
     }
@@ -127,6 +132,12 @@ if (isset($_POST['signIn'])) {
                   if ($notFound) {
                     echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
                           Account not found!
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>';
+                  }
+                  if ($disabled) {
+                    echo '<div class="alert alert-danger text-center alert-dismissible fade show" role="alert">
+                          This Account has Been Disabled!
                           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>';
                   }

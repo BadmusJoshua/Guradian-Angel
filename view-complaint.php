@@ -28,6 +28,37 @@ if (isset($_POST['valid'])) {
     $stmt->execute(['1', '1', $adminId, $complaintId]);
 }
 if (isset($_POST['report'])) {
+    //fetch attachment file
+    $sql = "SELECT evidence FROM complaints WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$complaintId]);
+    $fileData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($fileData) {
+        $filePath = $fileData['evidence'];
+
+        // Step 2: Read the file contents
+        $fileContents = file_get_contents($filePath);
+
+        if ($fileContents !== false) {
+            // Step 3: Output the file contents
+            // Set appropriate headers
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="' . basename($filePath) . '"');
+            header('Content-Length: ' . filesize($filePath));
+
+            // Output the file contents
+            echo $fileContents;
+            exit;
+        } else {
+            // Error handling if unable to read file
+            echo "Error: Unable to read file.";
+        }
+    } else {
+        // Error handling if file ID is invalid or not found
+        echo "Error: File not found.";
+    }
+
     $sql = "UPDATE complaints SET forward = ?, attended = ? , attendedBy = ? WHERE id = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['1', '1', $adminId, $complaintId]);

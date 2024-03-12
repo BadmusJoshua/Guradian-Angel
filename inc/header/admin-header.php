@@ -86,7 +86,52 @@ if ($stmt) {
     <link rel="stylesheet" href="css/aos.css">
 
 </head>
-
+<script>
+    var breakup = {
+        color: "#adb5bd",
+        series: [<?= $physical_abuse ?>, <?= $sexual_abuse ?>, <?= $child_labour ?>, <?= $medical_neglect ?>, <?= $abandonment ?>, <?= $Trafficking ?>],
+        labels: ["Physical Abuse", "Sexual Abuse", "Child Labor", "Medical Neglect", "Abandonment", "Trafficking and Exploitation"],
+        chart: {
+            width: 180,
+            type: "donut",
+            fontFamily: "Plus Jakarta Sans', sans-serif",
+            foreColor: "#adb0bb",
+        },
+        plotOptions: {
+            pie: {
+                startAngle: 0,
+                endAngle: 360,
+                donut: {
+                    size: '75%',
+                },
+            },
+        },
+        stroke: {
+            show: false,
+        },
+        dataLabels: {
+            enabled: false,
+        },
+        legend: {
+            show: false,
+        },
+        colors: ["#5D87FF", "#ed1", "#F0F", "#000", "#ad4", "#ca5"],
+        responsive: [{
+            breakpoint: 991,
+            options: {
+                chart: {
+                    width: 150,
+                },
+            },
+        }],
+        tooltip: {
+            theme: "dark",
+            fillSeriesColor: false,
+        },
+    };
+    var chart = new ApexCharts(document.querySelector("#chartup"), breakup);
+    chart.render();
+</script>
 
 <body>
     <!--  Body Wrapper -->
